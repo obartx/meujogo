@@ -1,0 +1,222 @@
+﻿<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Calculadora de Investimento FII</title>
+  <style>
+    :root {
+      --bg-1: #f6f8f2;
+      --bg-2: #e9efe3;
+      --card: #ffffff;
+      --head: #d9e7cf;
+      --line: #c9d5bf;
+      --text: #1f2a1f;
+      --accent: #3c6e47;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: "Segoe UI", "Trebuchet MS", sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 10% 15%, #ffffff 0%, transparent 35%),
+        radial-gradient(circle at 85% 80%, #dbe8d4 0%, transparent 30%),
+        linear-gradient(135deg, var(--bg-1), var(--bg-2));
+      min-height: 100vh;
+      padding: 24px;
+      display: grid;
+      place-items: start center;
+    }
+
+    .wrap {
+      width: min(980px, 100%);
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      box-shadow: 0 14px 30px rgba(31, 42, 31, 0.08);
+      overflow: hidden;
+      animation: rise 420ms ease-out;
+    }
+
+    @keyframes rise {
+      from { opacity: 0; transform: translateY(12px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    h1 {
+      margin: 0;
+      padding: 18px 20px;
+      background: #f1f6ec;
+      border-bottom: 1px solid var(--line);
+      font-size: 1.2rem;
+      letter-spacing: 0.2px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    th, td {
+      border: 1px solid var(--line);
+      padding: 10px;
+      text-align: center;
+      font-size: 1.02rem;
+    }
+
+    th {
+      background: var(--head);
+      font-weight: 700;
+    }
+
+    input {
+      width: 100%;
+      border: 1px solid #b7c6ad;
+      border-radius: 8px;
+      padding: 8px 10px;
+      font-size: 1rem;
+      text-align: center;
+      background: #fcfefb;
+    }
+
+    input:focus {
+      outline: 2px solid #9ac29f;
+      border-color: #9ac29f;
+    }
+
+    .out {
+      font-weight: 700;
+      color: #193f2a;
+      background: #f9fcf7;
+      border-radius: 8px;
+      padding: 8px;
+      min-height: 40px;
+      display: grid;
+      place-items: center;
+    }
+
+    .hint {
+      margin: 0;
+      padding: 14px 20px 18px;
+      font-size: 0.92rem;
+      color: #3a4c3a;
+      border-top: 1px solid var(--line);
+      background: #fcfefb;
+    }
+
+    @media (max-width: 900px) {
+      body { padding: 10px; }
+      .wrap { border-radius: 10px; }
+      table, thead, tbody, tr, th, td { display: block; }
+      thead { display: none; }
+      tr { border-bottom: 1px solid var(--line); padding: 8px 0; }
+      td {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 6px;
+      }
+      td::before {
+        content: attr(data-label);
+        font-weight: 700;
+        background: var(--head);
+        padding: 6px;
+        border-radius: 6px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <h1>Calculadora de Investimento em FII (com reinvestimento mensal)</h1>
+    <table>
+      <thead>
+        <tr>
+          <th>FII</th>
+          <th>Valor da Cota (R$)</th>
+          <th>Valor do Dividendo (R$)</th>
+          <th>Aporte Mensal (R$)</th>
+          <th>Período (meses)</th>
+          <th>Qtd de Cotas</th>
+          <th>Dividendos Mensais (R$)</th>
+          <th>Valor Total em Cotas (R$)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td data-label="FII"><input id="fii" value="MXRF11" /></td>
+          <td data-label="Valor da Cota (R$)"><input id="valorCota" type="number" step="0.01" value="9.51" /></td>
+          <td data-label="Valor do Dividendo (R$)"><input id="valorDividendo" type="number" step="0.01" value="0.10" /></td>
+          <td data-label="Aporte Mensal (R$)"><input id="aporteMensal" type="number" step="0.01" value="100" /></td>
+          <td data-label="Período (meses)"><input id="periodo" type="number" step="1" value="68" /></td>
+          <td data-label="Qtd de Cotas"><div class="out" id="qtdCotas">-</div></td>
+          <td data-label="Dividendos Mensais (R$)"><div class="out" id="dividendosMensais">-</div></td>
+          <td data-label="Valor Total em Cotas (R$)"><div class="out" id="valorTotal">-</div></td>
+        </tr>
+      </tbody>
+    </table>
+    <p class="hint">
+      Regra usada: a cada mês compra novas cotas com <strong>aporte + dividendos recebidos</strong>, mantendo preço da cota e dividendo fixos.
+    </p>
+  </main>
+
+  <script>
+    const brl = new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' });
+    const dec = new Intl.NumberFormat('pt-BR', { minimumFractionDigits: 3, maximumFractionDigits: 3 });
+
+    const els = {
+      valorCota: document.getElementById('valorCota'),
+      valorDividendo: document.getElementById('valorDividendo'),
+      aporteMensal: document.getElementById('aporteMensal'),
+      periodo: document.getElementById('periodo'),
+      qtdCotas: document.getElementById('qtdCotas'),
+      dividendosMensais: document.getElementById('dividendosMensais'),
+      valorTotal: document.getElementById('valorTotal')
+    };
+
+    function num(v) {
+      const n = Number(v);
+      return Number.isFinite(n) ? n : 0;
+    }
+
+    function calcular() {
+      const valorCota = num(els.valorCota.value);
+      const valorDividendo = num(els.valorDividendo.value);
+      const aporteMensal = num(els.aporteMensal.value);
+      const periodo = Math.max(0, Math.floor(num(els.periodo.value)));
+
+      if (valorCota <= 0) {
+        els.qtdCotas.textContent = '0,000';
+        els.dividendosMensais.textContent = brl.format(0);
+        els.valorTotal.textContent = brl.format(0);
+        return;
+      }
+
+      let cotas = 0;
+      for (let i = 0; i < periodo; i++) {
+        const dividendosDoMes = cotas * valorDividendo;
+        const capitalDoMes = aporteMensal + dividendosDoMes;
+        cotas += capitalDoMes / valorCota;
+      }
+
+      const dividendosMensais = cotas * valorDividendo;
+      const valorTotal = cotas * valorCota;
+
+      els.qtdCotas.textContent = dec.format(cotas);
+      els.dividendosMensais.textContent = brl.format(dividendosMensais);
+      els.valorTotal.textContent = brl.format(valorTotal);
+    }
+
+    [
+      els.valorCota,
+      els.valorDividendo,
+      els.aporteMensal,
+      els.periodo
+    ].forEach((el) => el.addEventListener('input', calcular));
+
+    calcular();
+  </script>
+</body>
+</html>
