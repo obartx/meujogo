@@ -3,15 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Panda Jump 3D - Ultimate Skins</title>
+    <title>Panda Jump 3D - Deluxe Edition</title>
     <style>
         :root {
             --primary: #ff4757;
             --secondary: #2f3542;
             --accent: #ffa502;
-            --bg-ui: rgba(255, 255, 255, 0.95);
+            --bg-ui: rgba(255, 255, 255, 0.98);
         }
-        body { margin: 0; overflow: hidden; font-family: 'Segoe UI', sans-serif; background: #a5f3fc; touch-action: none; }
+        body { 
+            margin: 0; 
+            overflow: hidden; 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            background: linear-gradient(to bottom, #1e3a8a, #3b82f6); 
+            touch-action: none; 
+        }
         
         #ui-hud {
             position: absolute;
@@ -24,129 +30,128 @@
             z-index: 10;
         }
         .stat-box {
-            background: rgba(15, 23, 42, 0.25);
-            padding: 10px 25px;
+            background: rgba(0, 0, 0, 0.4);
+            padding: 12px 28px;
             border-radius: 40px;
             color: white;
-            font-weight: bold;
-            backdrop-filter: blur(10px);
+            font-weight: 800;
+            backdrop-filter: blur(12px);
             font-size: 24px;
-            border: 1.5px solid rgba(255,255,255,0.2);
+            border: 2px solid rgba(255,255,255,0.15);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
         }
 
+        /* Controles */
         #joystick-container {
             position: absolute;
             bottom: 40px;
             left: 30px;
-            width: 180px; 
-            height: 180px;
-            background: rgba(25, 25, 35, 0.4);
+            width: 160px; 
+            height: 160px;
+            background: rgba(255, 255, 255, 0.1);
             border-radius: 50%;
-            touch-action: none;
             z-index: 100;
             display: none;
-            border: 3px solid rgba(0, 150, 255, 0.4);
-            box-shadow: 0 0 30px rgba(0, 150, 255, 0.15);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            backdrop-filter: blur(5px);
         }
         #joystick-knob {
             position: absolute;
             top: 50%;
             left: 50%;
-            width: 80px;
-            height: 80px;
-            background: radial-gradient(circle, #0096ff, #0055ff);
+            width: 70px;
+            height: 70px;
+            background: white;
             border-radius: 50%;
             transform: translate(-50%, -50%);
-            box-shadow: 0 0 20px rgba(0, 150, 255, 0.8), inset 0 0 15px rgba(255,255,255,0.4);
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.4);
             pointer-events: none;
         }
-
         #jump-btn {
             position: absolute;
             bottom: 40px;
             right: 30px;
-            width: 120px;
-            height: 120px;
-            background: rgba(255, 71, 87, 0.8);
+            width: 110px;
+            height: 110px;
+            background: var(--primary);
             border-radius: 50%;
             display: none;
             z-index: 100;
             justify-content: center;
             align-items: center;
             color: white;
-            font-weight: bold;
-            font-size: 18px;
-            text-align: center;
-            border: 4px solid white;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+            font-weight: 900;
+            border: 5px solid white;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
             user-select: none;
-            touch-action: none;
-            line-height: 1.1;
         }
 
+        /* Menus */
         #overlay {
             position: absolute;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(15, 23, 42, 0.5);
+            background: rgba(0, 0, 0, 0.6);
             display: flex;
             justify-content: center;
             align-items: center;
             z-index: 200;
-            backdrop-filter: blur(6px);
+            backdrop-filter: blur(10px);
         }
-
-        #countdown-timer {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            color: white;
-            font-size: 120px;
-            font-weight: 900;
-            z-index: 150;
-            text-shadow: 0 10px 30px rgba(0,0,0,0.5);
-            display: none;
-            pointer-events: none;
-        }
-        
-        .countdown-anim {
-            animation: pop 1s ease-out forwards;
-        }
-
-        @keyframes pop {
-            0% { transform: translate(-50%, -50%) scale(0.5); opacity: 0; }
-            50% { transform: translate(-50%, -50%) scale(1.2); opacity: 1; }
-            100% { transform: translate(-50%, -50%) scale(1); opacity: 0; }
-        }
-        
         .card {
             background: var(--bg-ui);
-            width: 85%;
-            max-width: 400px;
-            border-radius: 35px;
+            width: 90%;
+            max-width: 420px;
+            border-radius: 40px;
             padding: 30px;
             text-align: center;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
         }
-
         .tabs { display: flex; margin-bottom: 25px; background: #f1f5f9; border-radius: 20px; padding: 5px; }
-        .tab-btn { flex: 1; padding: 12px; border: none; cursor: pointer; font-weight: 800; background: transparent; border-radius: 15px; color: #64748b; }
-        .tab-btn.active { background: white; color: var(--primary); box-shadow: 0 5px 15px rgba(0,0,0,0.08); }
+        .tab-btn { flex: 1; padding: 12px; border: none; cursor: pointer; font-weight: 800; background: transparent; border-radius: 15px; color: #64748b; transition: 0.3s; }
+        .tab-btn.active { background: white; color: var(--primary); box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
 
         .tab-content { display: none; }
         .tab-content.active { display: block; }
 
-        .skin-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin-bottom: 25px; max-height: 320px; overflow-y: auto; padding: 10px; }
-        .skin-item { background: white; padding: 15px; border-radius: 25px; border: 3px solid #f1f5f9; cursor: pointer; position: relative; transition: transform 0.2s; }
-        .skin-item:active { transform: scale(0.95); }
+        .skin-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin-bottom: 25px; max-height: 300px; overflow-y: auto; padding: 10px; }
+        .skin-item { background: white; padding: 15px; border-radius: 25px; border: 3px solid #f1f5f9; cursor: pointer; position: relative; transition: 0.2s; }
         .skin-item.selected { border-color: var(--primary); background: #fff1f2; }
-        .skin-item.locked { opacity: 0.9; }
-        .skin-icon { font-size: 42px; }
-        .price-tag { font-size: 14px; color: #ffa502; font-weight: bold; margin-top: 5px; }
-
-        button.main-btn {
+        .skin-item.locked { opacity: 0.7; }
+        
+        .main-btn {
             background: linear-gradient(135deg, #ff4757, #ff6b81);
-            color: white; border: none; padding: 20px; font-size: 24px; border-radius: 25px; cursor: pointer; font-weight: 900; width: 100%;
+            color: white; border: none; padding: 18px; font-size: 22px; border-radius: 20px; cursor: pointer; font-weight: 900; width: 100%;
+            box-shadow: 0 6px 0 #b91c1c; margin-bottom: 10px;
         }
+        .main-btn:active { transform: translateY(4px); box-shadow: 0 2px 0 #b91c1c; }
+
+        /* Configurações */
+        .settings-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            background: #f8fafc;
+            border-radius: 15px;
+            margin-bottom: 10px;
+        }
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 34px;
+        }
+        .switch input { opacity: 0; width: 0; height: 0; }
+        .slider {
+            position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0;
+            background-color: #cbd5e1; transition: .4s; border-radius: 34px;
+        }
+        .slider:before {
+            position: absolute; content: ""; height: 26px; width: 26px; left: 4px; bottom: 4px;
+            background-color: white; transition: .4s; border-radius: 50%;
+        }
+        input:checked + .slider { background-color: var(--primary); }
+        input:checked + .slider:before { transform: translateX(26px); }
 
         canvas { display: block; }
     </style>
@@ -158,38 +163,99 @@
         <div class="stat-box">💰 <span id="coins">0</span></div>
     </div>
 
-    <div id="countdown-timer"></div>
-
     <div id="joystick-container">
         <div id="joystick-knob"></div>
     </div>
 
-    <div id="jump-btn">PULAR<br><small style="font-size: 10px;">DUPLO JUMP</small></div>
+    <div id="jump-btn">PULAR</div>
 
     <div id="overlay">
         <div class="card">
             <div class="tabs">
-                <button class="tab-btn active" id="btn-home" onclick="showTab('home')">INÍCIO</button>
-                <button class="tab-btn" id="btn-shop" onclick="showTab('shop')">LOJA</button>
+                <button class="tab-btn active" onclick="showTab('home', this)">INÍCIO</button>
+                <button class="tab-btn" onclick="showTab('shop', this)">LOJA</button>
+                <button class="tab-btn" onclick="showTab('settings', this)">⚙️</button>
             </div>
 
             <div id="home" class="tab-content active">
-                <h1 id="menu-title" style="color: var(--secondary); margin: 0 0 10px 0; font-size: 32px;">Panda Jump</h1>
-                <p id="menu-desc" style="color: #64748b; margin-bottom: 30px; font-weight: 500;">Colete moedas e desvie dos obstáculos!<br>Use WASD + Espaço no PC.</p>
-                <button class="main-btn" onclick="startPreGame()">JOGAR!</button>
+                <h1 style="color: var(--secondary); margin-bottom: 5px; font-size: 36px;">Panda Jump</h1>
+                <p style="color: #64748b; margin-bottom: 25px;">O salto definitivo para a riqueza!</p>
+                <button class="main-btn" onclick="startGame()">JOGAR AGORA</button>
             </div>
 
             <div id="shop" class="tab-content">
-                <h2 style="color: var(--secondary); margin: 0 0 10px 0; font-size: 22px;">Skins Exclusivas</h2>
-                <p style="font-size: 12px; margin-bottom: 15px;">Moedas: <span id="shop-coins" style="font-weight: bold; color: #ffa502;">0</span></p>
+                <p style="font-weight: bold; color: #ffa502;">Suas Moedas: <span id="shop-coins">0</span></p>
                 <div class="skin-grid" id="skinGrid"></div>
+            </div>
+
+            <div id="settings" class="tab-content">
+                <h2 style="margin-top: 0;">Configurações</h2>
+                <div class="settings-row">
+                    <span>Música Relaxante</span>
+                    <label class="switch">
+                        <input type="checkbox" id="musicToggle" checked onchange="toggleMusic()">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                <div class="settings-row">
+                    <span>Efeitos Sonoros</span>
+                    <label class="switch">
+                        <input type="checkbox" id="sfxToggle" checked>
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                <p style="font-size: 11px; color: #94a3b8; margin-top: 20px;">Versão 2.5 - Estável</p>
             </div>
         </div>
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script>
-        // Função para abreviar números
+        // --- SISTEMA DE ÁUDIO (Sintetizador Procedural) ---
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        let musicEnabled = true;
+        let melodyOscillator = null;
+        let melodyGain = null;
+        let musicInterval = null;
+
+        function playNote(freq, startTime, duration, vol = 0.1) {
+            if (!musicEnabled) return;
+            const osc = audioCtx.createOscillator();
+            const g = audioCtx.createGain();
+            osc.type = 'triangle';
+            osc.frequency.setValueAtTime(freq, startTime);
+            g.gain.setValueAtTime(0, startTime);
+            g.gain.linearRampToValueAtTime(vol, startTime + 0.1);
+            g.gain.exponentialRampToValueAtTime(0.0001, startTime + duration);
+            osc.connect(g);
+            g.connect(audioCtx.destination);
+            osc.start(startTime);
+            osc.stop(startTime + duration);
+        }
+
+        const scales = [261.63, 293.66, 329.63, 392.00, 440.00, 523.25]; // C D E G A C
+        let step = 0;
+        function startMelody() {
+            if (musicInterval) return;
+            musicInterval = setInterval(() => {
+                if (audioCtx.state === 'suspended') audioCtx.resume();
+                if (!musicEnabled) return;
+                const freq = scales[Math.floor(Math.random() * scales.length)];
+                playNote(freq, audioCtx.currentTime, 1.5, 0.05);
+                if (step % 4 === 0) playNote(scales[0]/2, audioCtx.currentTime, 2.0, 0.03);
+                step++;
+            }, 800);
+        }
+
+        function toggleMusic() {
+            musicEnabled = document.getElementById('musicToggle').checked;
+            if (musicEnabled) {
+                if (audioCtx.state === 'suspended') audioCtx.resume();
+                startMelody();
+            }
+        }
+
+        // --- LÓGICA DO JOGO ---
         function formatNumber(num) {
             if (num >= 1000000000) return (num / 1000000000).toFixed(1).replace(/\.0$/, '') + 'B';
             if (num >= 1000000) return (num / 1000000).toFixed(1).replace(/\.0$/, '') + 'M';
@@ -197,7 +263,6 @@
             return num.toString();
         }
 
-        // Configuração de Skins Expandida (14 skins totais)
         const SKINS = [
             { id: 'panda', name: 'Panda', icon: '🐼', colors: { body: 0xffffff, accent: 0x222222 }, price: 0, owned: true },
             { id: 'cat', name: 'Gatinho', icon: '🐱', colors: { body: 0xffa502, accent: 0xffffff }, price: 500, owned: false },
@@ -215,40 +280,24 @@
             { id: 'gold', name: 'Ouro Puro', icon: '🏆', colors: { body: 0xfacc15, accent: 0xd97706 }, price: 1000000000, owned: false }
         ];
 
-        let currentSkinId = 'panda';
         let totalCoins = 0;
-        let sessionScore = 0;
-
-        let scene, camera, renderer, player, platforms = [], clouds = [], items = [], obstacles = [];
+        let currentSkinId = 'panda';
         let gameActive = false;
-        let clock = new THREE.Clock();
-        
-        // Física e Controle
-        const GRAVITY = 40;
-        const JUMP_FORCE = 15.5; 
-        const MIN_JUMP_FORCE = 7.5;
-        const PLATFORM_GAP_BASE = 7.5; 
-        const LATERAL_SENSITIVITY = 0.12;
-        
-        let playerVelocityY = 0;
-        let isJumping = false;
-        let jumpsAvailable = 2;
-        let isHoldingJump = false;
-        let gameSpeed = 9.0;
-        let moveInput = { x: 0, z: 0 };
+        let score = 0;
 
-        const keys = { w: false, a: false, s: false, d: false, space: false };
-
-        // Joystick
-        const joystickContainer = document.getElementById('joystick-container');
-        const joystickKnob = document.getElementById('joystick-knob');
-        let joystickActive = false;
-        let joystickCenter = { x: 0, y: 0 };
-        let joystickTouchId = null;
+        // ThreeJS Vars
+        let scene, camera, renderer, player, platforms = [], items = [], obstacles = [];
+        let playerVelY = 0;
+        let jumps = 2;
+        let moveX = 0;
+        let moveZ = 0;
+        let speed = 9;
 
         function init() {
             scene = new THREE.Scene();
-            scene.fog = new THREE.Fog(0xa5f3fc, 25, 75);
+            // Céu bonito com degradê
+            scene.background = new THREE.Color(0x3b82f6);
+            scene.fog = new THREE.Fog(0x3b82f6, 20, 80);
 
             camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
             camera.position.set(0, 10, 18);
@@ -256,364 +305,288 @@
 
             renderer = new THREE.WebGLRenderer({ antialias: true });
             renderer.setSize(window.innerWidth, window.innerHeight);
-            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
             renderer.shadowMap.enabled = true;
             document.body.appendChild(renderer.domElement);
 
-            const ambientLight = new THREE.AmbientLight(0xffffff, 0.8);
-            scene.add(ambientLight);
+            const hemi = new THREE.HemisphereLight(0xffffff, 0x3b82f6, 0.8);
+            scene.add(hemi);
 
-            const sunLight = new THREE.DirectionalLight(0xffffff, 1.2);
-            sunLight.position.set(10, 30, 10);
-            sunLight.castShadow = true;
-            scene.add(sunLight);
+            const dir = new THREE.DirectionalLight(0xffffff, 1);
+            dir.position.set(5, 20, 10);
+            dir.castShadow = true;
+            scene.add(dir);
 
-            createEnvironment();
-            renderShop();
+            createGround();
             updatePlayerModel();
+            renderShop();
             setupControls();
-            resetLevel();
-
-            window.addEventListener('resize', onWindowResize);
+            
             animate();
+            startMelody();
         }
 
-        function setupControls() {
-            // JOYSTICK (Mobile)
-            const handleJoystickStart = (e) => {
-                if(!gameActive || joystickActive) return;
-                const touch = e.changedTouches ? e.changedTouches[0] : e;
-                if (e.type === 'mousedown' && e.button !== 0) return;
-                const rect = joystickContainer.getBoundingClientRect();
-                joystickActive = true;
-                joystickTouchId = touch.identifier !== undefined ? touch.identifier : "mouse";
-                joystickCenter = { x: rect.left + rect.width / 2, y: rect.top + rect.height / 2 };
-                updateJoystickPos(touch);
-            };
-
-            const handleJoystickMove = (e) => {
-                if (!joystickActive) return;
-                let targetTouch = null;
-                if (e.changedTouches) {
-                    for (let i = 0; i < e.changedTouches.length; i++) {
-                        if (e.changedTouches[i].identifier === joystickTouchId) {
-                            targetTouch = e.changedTouches[i];
-                            break;
-                        }
-                    }
-                } else { targetTouch = e; }
-                if (targetTouch) { e.preventDefault(); updateJoystickPos(targetTouch); }
-            };
-
-            const updateJoystickPos = (input) => {
-                let dx = input.clientX - joystickCenter.x;
-                let dy = input.clientY - joystickCenter.y;
-                const dist = Math.sqrt(dx*dx + dy*dy);
-                const maxDist = 80;
-                if (dist > maxDist) { dx *= maxDist / dist; dy *= maxDist / dist; }
-                joystickKnob.style.transform = `translate(calc(-50% + ${dx}px), calc(-50% + ${dy}px))`;
-                moveInput.x = dx / maxDist;
-                moveInput.z = dy < 0 ? Math.abs(dy / maxDist) : 0;
-            };
-
-            const handleJoystickEnd = (e) => {
-                if (!joystickActive) return;
-                let shouldEnd = false;
-                if (e.changedTouches) {
-                    for (let i = 0; i < e.changedTouches.length; i++) {
-                        if (e.changedTouches[i].identifier === joystickTouchId) { shouldEnd = true; break; }
-                    }
-                } else { shouldEnd = true; }
-                if (shouldEnd) {
-                    joystickActive = false; joystickTouchId = null;
-                    joystickKnob.style.transform = `translate(-50%, -50%)`;
-                    if(!Object.values(keys).some(v => v)) moveInput = { x: 0, z: 0 };
-                }
-            };
-
-            joystickContainer.addEventListener('touchstart', handleJoystickStart);
-            window.addEventListener('touchmove', handleJoystickMove, { passive: false });
-            window.addEventListener('touchend', handleJoystickEnd);
-            joystickContainer.addEventListener('mousedown', handleJoystickStart);
-            window.addEventListener('mousemove', handleJoystickMove);
-            window.addEventListener('mouseup', handleJoystickEnd);
-
-            const jumpBtn = document.getElementById('jump-btn');
-            const startJumpUI = (e) => { if(!gameActive) return; e.preventDefault(); isHoldingJump = true; handleJump(); };
-            jumpBtn.addEventListener('touchstart', startJumpUI);
-            jumpBtn.addEventListener('mousedown', startJumpUI);
-            window.addEventListener('mouseup', () => isHoldingJump = false);
-            window.addEventListener('touchend', () => isHoldingJump = false);
-
-            window.addEventListener('keydown', (e) => {
-                const k = e.key.toLowerCase();
-                if (k === 'w') keys.w = true;
-                if (k === 'a') keys.a = true;
-                if (k === 's') keys.s = true;
-                if (k === 'd') keys.d = true;
-                if (k === ' ' || k === 'spacebar') {
-                    if (!keys.space && gameActive) handleJump();
-                    keys.space = true; isHoldingJump = true;
-                }
-            });
-            window.addEventListener('keyup', (e) => {
-                const k = e.key.toLowerCase();
-                if (k === 'w') keys.w = false; if (k === 'a') keys.a = false;
-                if (k === 's') keys.s = false; if (k === 'd') keys.d = false;
-                if (k === ' ' || k === 'spacebar') { keys.space = false; isHoldingJump = false; }
-            });
-        }
-
-        function updateInputs() {
-            if (!joystickActive) {
-                let kx = 0; let kz = 0;
-                if (keys.a) kx -= 1; if (keys.d) kx += 1;
-                if (keys.w) kz = 1; if (keys.s) kz = -0.5;
-                moveInput.x = kx; moveInput.z = kz;
-            }
-        }
-
-        function createEnvironment() {
-            const groundGeo = new THREE.PlaneGeometry(200, 200);
-            const groundMat = new THREE.MeshPhongMaterial({ color: 0x7dd3fc });
-            const ground = new THREE.Mesh(groundGeo, groundMat);
-            ground.rotation.x = -Math.PI / 2; ground.position.y = -15; scene.add(ground);
-
-            for(let i = 0; i < 20; i++) {
-                const cloud = new THREE.Group();
-                const mat = new THREE.MeshLambertMaterial({ color: 0xffffff, transparent: true, opacity: 0.8 });
-                const size = 1 + Math.random();
-                const part = new THREE.Mesh(new THREE.BoxGeometry(size*4, size, size*2.5), mat);
-                cloud.add(part);
-                cloud.position.set(Math.random() * 120 - 60, Math.random() * 15 + 10, -Math.random() * 150);
-                scene.add(cloud); clouds.push(cloud);
-            }
+        function createGround() {
+            // "Mar" lá embaixo
+            const geo = new THREE.PlaneGeometry(1000, 1000);
+            const mat = new THREE.MeshPhongMaterial({ color: 0x1e3a8a });
+            const mesh = new THREE.Mesh(geo, mat);
+            mesh.rotation.x = -Math.PI/2;
+            mesh.position.y = -20;
+            scene.add(mesh);
         }
 
         function updatePlayerModel() {
             if (player) scene.remove(player);
-            const skinData = SKINS.find(s => s.id === currentSkinId);
-            const group = new THREE.Group();
-            const body = new THREE.Mesh(new THREE.BoxGeometry(1.1, 1.1, 1.1), new THREE.MeshPhongMaterial({ color: skinData.colors.body }));
-            body.castShadow = true; group.add(body);
-            const detailMat = new THREE.MeshPhongMaterial({ color: skinData.colors.accent });
-            const earGeo = new THREE.BoxGeometry(0.35, 0.35, 0.25);
-            const dL = new THREE.Mesh(earGeo, detailMat); dL.position.set(-0.45, 0.55, 0); group.add(dL);
-            const dR = new THREE.Mesh(earGeo, detailMat); dR.position.set(0.45, 0.55, 0); group.add(dR);
-            player = group; player.position.set(0, 1.2, 0); scene.add(player);
+            const s = SKINS.find(x => x.id === currentSkinId);
+            player = new THREE.Group();
+            const body = new THREE.Mesh(new THREE.BoxGeometry(1.1, 1.1, 1.1), new THREE.MeshPhongMaterial({ color: s.colors.body }));
+            body.castShadow = true;
+            player.add(body);
+            
+            // Detalhes extras no modelo
+            const earGeo = new THREE.BoxGeometry(0.4, 0.4, 0.2);
+            const earMat = new THREE.MeshPhongMaterial({ color: s.colors.accent });
+            const e1 = new THREE.Mesh(earGeo, earMat); e1.position.set(-0.4, 0.6, 0); player.add(e1);
+            const e2 = new THREE.Mesh(earGeo, earMat); e2.position.set(0.4, 0.6, 0); player.add(e2);
+
+            scene.add(player);
+            player.position.set(0, 1.2, 0);
         }
 
-        function createPlatform(z, forceStatic = false) {
-            const colors = [0xff4757, 0x2ed573, 0xffa502, 0x1e90ff, 0x70a1ff];
-            const width = forceStatic ? 6 : 4.5 + (Math.random() * 3.0);
-            const mesh = new THREE.Mesh(new THREE.BoxGeometry(width, 1.2, 4.0), new THREE.MeshPhongMaterial({ color: colors[Math.floor(Math.random() * colors.length)] }));
-            mesh.position.set(forceStatic ? 0 : (Math.random() - 0.5) * 8.5, 0, z);
-            mesh.receiveShadow = true;
-            
-            if(!forceStatic && Math.random() > 0.7) {
-                mesh.userData.isMoving = true;
-                mesh.userData.speed = (1.5 + Math.random()) * (Math.random() > 0.5 ? 1 : -1);
-            }
-            scene.add(mesh);
-            platforms.push(mesh);
+        function setupControls() {
+            // Joystick logic
+            const container = document.getElementById('joystick-container');
+            const knob = document.getElementById('joystick-knob');
+            let active = false;
+            let origin = {x:0, y:0};
 
-            if (!forceStatic && Math.random() > 0.6) spawnCoin(mesh.position.x, mesh.position.z);
-            if (!forceStatic && Math.random() > 0.8) spawnObstacle(mesh);
+            const start = (e) => {
+                if(!gameActive) return;
+                active = true;
+                const t = e.touches ? e.touches[0] : e;
+                const r = container.getBoundingClientRect();
+                origin = {x: r.left + r.width/2, y: r.top + r.height/2};
+            };
+            const move = (e) => {
+                if(!active) return;
+                const t = e.touches ? e.touches[0] : e;
+                let dx = t.clientX - origin.x;
+                let dy = t.clientY - origin.y;
+                const d = Math.sqrt(dx*dx + dy*dy);
+                if(d > 60) { dx *= 60/d; dy *= 60/d; }
+                knob.style.transform = `translate(calc(-50% + ${dx}px), calc(-50% + ${dy}px))`;
+                moveX = dx/60;
+                moveZ = dy < 0 ? Math.abs(dy/60) : 0;
+            };
+            const end = () => {
+                active = false;
+                knob.style.transform = `translate(-50%, -50%)`;
+                moveX = 0; moveZ = 0;
+            };
+
+            container.addEventListener('touchstart', start);
+            window.addEventListener('touchmove', move, {passive:false});
+            window.addEventListener('touchend', end);
+            container.addEventListener('mousedown', start);
+            window.addEventListener('mousemove', move);
+            window.addEventListener('mouseup', end);
+
+            // Jump
+            const jBtn = document.getElementById('jump-btn');
+            jBtn.addEventListener('touchstart', (e) => { e.preventDefault(); jump(); });
+            jBtn.addEventListener('mousedown', jump);
+
+            window.addEventListener('keydown', (e) => {
+                if(e.code === 'Space') jump();
+                if(e.key === 'a' || e.key === 'ArrowLeft') moveX = -1;
+                if(e.key === 'd' || e.key === 'ArrowRight') moveX = 1;
+                if(e.key === 'w' || e.key === 'ArrowUp') moveZ = 1;
+            });
+            window.addEventListener('keyup', (e) => {
+                if(['a','d','ArrowLeft','ArrowRight'].includes(e.key)) moveX = 0;
+                if(['w','ArrowUp'].includes(e.key)) moveZ = 0;
+            });
+        }
+
+        function jump() {
+            if(!gameActive) return;
+            if(jumps > 0) {
+                playerVelY = 15;
+                jumps--;
+                if(document.getElementById('sfxToggle').checked) playNote(440, audioCtx.currentTime, 0.1, 0.05);
+            }
+        }
+
+        function createPlatform(z, isFirst = false) {
+            const w = isFirst ? 8 : 4 + Math.random() * 4;
+            const geo = new THREE.BoxGeometry(w, 1.2, 4);
+            const mat = new THREE.MeshPhongMaterial({ 
+                color: new THREE.Color().setHSL(Math.random(), 0.7, 0.5) 
+            });
+            const p = new THREE.Mesh(geo, mat);
+            p.position.set(isFirst ? 0 : (Math.random()-0.5)*10, 0, z);
+            p.receiveShadow = true;
+            scene.add(p);
+            platforms.push(p);
+
+            if(!isFirst) {
+                if(Math.random() > 0.5) spawnCoin(p.position.x, z);
+                if(Math.random() > 0.8) spawnObstacle(p);
+            }
         }
 
         function spawnCoin(x, z) {
-            const coinGeo = new THREE.CylinderGeometry(0.5, 0.5, 0.1, 16);
-            const coinMat = new THREE.MeshPhongMaterial({ color: 0xffd700, emissive: 0xaa8800 });
-            const coin = new THREE.Mesh(coinGeo, coinMat);
-            coin.rotation.x = Math.PI / 2;
-            coin.position.set(x, 1.8, z);
-            scene.add(coin);
-            items.push(coin);
+            const geo = new THREE.CylinderGeometry(0.5, 0.5, 0.15, 16);
+            const mat = new THREE.MeshPhongMaterial({ color: 0xffd700, emissive: 0xaa8800 });
+            const c = new THREE.Mesh(geo, mat);
+            c.rotation.x = Math.PI/2;
+            c.position.set(x, 2, z);
+            scene.add(c);
+            items.push(c);
         }
 
-        function spawnObstacle(parentPlatform) {
-            const obsGeo = new THREE.BoxGeometry(1, 1, 1);
-            const obsMat = new THREE.MeshPhongMaterial({ color: 0x222222 });
-            const obs = new THREE.Mesh(obsGeo, obsMat);
-            obs.position.set(parentPlatform.position.x + (Math.random() - 0.5) * 2, 1.1, parentPlatform.position.z);
-            obs.userData.parent = parentPlatform;
-            scene.add(obs);
-            obstacles.push(obs);
+        function spawnObstacle(plat) {
+            const geo = new THREE.BoxGeometry(1.2, 1.2, 1.2);
+            const mat = new THREE.MeshPhongMaterial({ color: 0x333333 });
+            const o = new THREE.Mesh(geo, mat);
+            o.position.set(plat.position.x + (Math.random()-0.5)*2, 1.2, plat.position.z);
+            o.userData.parent = plat;
+            scene.add(o);
+            obstacles.push(o);
         }
 
-        function handleJump() {
-            if (jumpsAvailable > 0) {
-                playerVelocityY = JUMP_FORCE;
-                isJumping = true;
-                jumpsAvailable--;
-                if (jumpsAvailable === 0) player.rotation.z += Math.PI; 
-            }
+        function startGame() {
+            document.getElementById('overlay').style.display = 'none';
+            document.getElementById('joystick-container').style.display = 'block';
+            document.getElementById('jump-btn').style.display = 'flex';
+            resetGame();
+            gameActive = true;
+            if(audioCtx.state === 'suspended') audioCtx.resume();
+        }
+
+        function resetGame() {
+            platforms.forEach(p => scene.remove(p)); platforms = [];
+            items.forEach(i => scene.remove(i)); items = [];
+            obstacles.forEach(o => scene.remove(o)); obstacles = [];
+            score = 0; speed = 9; playerVelY = 0;
+            player.position.set(0, 1.2, 0);
+            document.getElementById('score').innerText = "0";
+            createPlatform(0, true);
+            for(let i=1; i<10; i++) createPlatform(-i * 8);
         }
 
         function gameOver() {
             gameActive = false;
             document.getElementById('overlay').style.display = 'flex';
-            document.getElementById('joystick-container').style.display = 'none';
-            document.getElementById('jump-btn').style.display = 'none';
-            updateUI();
-            showTab('home');
+            if(document.getElementById('sfxToggle').checked) playNote(100, audioCtx.currentTime, 0.5, 0.1);
         }
 
-        function updateUI() {
-            const coinStr = formatNumber(totalCoins);
-            document.getElementById('coins').innerText = coinStr;
-            document.getElementById('shop-coins').innerText = coinStr;
-        }
-
-        function resetLevel() {
-            platforms.forEach(p => scene.remove(p)); platforms = [];
-            items.forEach(i => scene.remove(i)); items = [];
-            obstacles.forEach(o => scene.remove(o)); obstacles = [];
-            player.position.set(0, 1.2, 0); playerVelocityY = 0; 
-            isJumping = false; jumpsAvailable = 2;
-            sessionScore = 0; gameSpeed = 9.0;
-            document.getElementById('score').innerText = "0";
-            updateUI();
-            createPlatform(0, true);
-            for(let i = 1; i < 8; i++) createPlatform(-i * PLATFORM_GAP_BASE);
-        }
-
-        function startPreGame() {
-            resetLevel();
-            document.getElementById('overlay').style.display = 'none';
-            document.getElementById('joystick-container').style.display = 'block';
-            document.getElementById('jump-btn').style.display = 'flex';
-            
-            const timerEl = document.getElementById('countdown-timer');
-            timerEl.style.display = 'block';
-            let count = 3;
-            const runCountdown = () => {
-                timerEl.innerText = count > 0 ? count : "VAI!";
-                timerEl.classList.remove('countdown-anim');
-                void timerEl.offsetWidth; timerEl.classList.add('countdown-anim');
-                if (count >= 0) { count--; setTimeout(runCountdown, 1000); }
-                else { timerEl.style.display = 'none'; gameActive = true; }
-            };
-            runCountdown();
-        }
-
-        function buyOrSelectSkin(skin) {
-            if (skin.owned) {
-                currentSkinId = skin.id;
-            } else if (totalCoins >= skin.price) {
-                totalCoins -= skin.price;
-                skin.owned = true;
-                currentSkinId = skin.id;
-                updateUI();
-            }
-            renderShop();
-            updatePlayerModel();
+        function showTab(id, btn) {
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+            btn.classList.add('active');
         }
 
         function renderShop() {
             const grid = document.getElementById('skinGrid');
             grid.innerHTML = '';
-            SKINS.forEach(skin => {
-                const item = document.createElement('div');
-                item.className = `skin-item ${skin.id === currentSkinId ? 'selected' : ''} ${!skin.owned ? 'locked' : ''}`;
-                item.onclick = () => buyOrSelectSkin(skin);
-                
-                let content = `<div class="skin-icon">${skin.icon}</div><div style="font-size:12px; font-weight:bold">${skin.name}</div>`;
-                if (!skin.owned) {
-                    content += `<div class="price-tag">💰 ${formatNumber(skin.price)}</div>`;
-                } else {
-                    content += `<div style="font-size:10px; color: #22c55e; margin-top:5px; font-weight:bold">SELECIONAR</div>`;
-                }
-                item.innerHTML = content;
-                grid.appendChild(item);
+            document.getElementById('shop-coins').innerText = formatNumber(totalCoins);
+            SKINS.forEach(s => {
+                const div = document.createElement('div');
+                div.className = `skin-item ${s.id === currentSkinId ? 'selected' : ''} ${!s.owned ? 'locked' : ''}`;
+                div.innerHTML = `
+                    <div style="font-size: 40px">${s.icon}</div>
+                    <div style="font-weight:bold">${s.name}</div>
+                    <div style="color: #ffa502; font-size: 13px">${s.owned ? 'Adquirido' : '💰 '+formatNumber(s.price)}</div>
+                `;
+                div.onclick = () => {
+                    if(s.owned) {
+                        currentSkinId = s.id;
+                        updatePlayerModel();
+                    } else if(totalCoins >= s.price) {
+                        totalCoins -= s.price;
+                        s.owned = true;
+                        currentSkinId = s.id;
+                        updatePlayerModel();
+                        updateHUD();
+                    }
+                    renderShop();
+                };
+                grid.appendChild(div);
             });
         }
 
-        function showTab(tabId) {
-            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-            document.getElementById(tabId).classList.add('active');
-            document.getElementById('btn-' + tabId).classList.add('active');
-        }
-
-        function onWindowResize() {
-            camera.aspect = window.innerWidth / window.innerHeight;
-            camera.updateProjectionMatrix();
-            renderer.setSize(window.innerWidth, window.innerHeight);
+        function updateHUD() {
+            document.getElementById('coins').innerText = formatNumber(totalCoins);
+            document.getElementById('shop-coins').innerText = formatNumber(totalCoins);
         }
 
         function animate() {
             requestAnimationFrame(animate);
-            let delta = clock.getDelta();
-            if(delta > 0.1) delta = 0.016;
-
-            clouds.forEach(c => { c.position.x += 1.0 * delta; if(c.position.x > 60) c.position.x = -60; });
-
-            if (gameActive) {
-                updateInputs();
-                if (Math.abs(moveInput.x) > 0.01) player.position.x += moveInput.x * LATERAL_SENSITIVITY * 95 * delta;
-                player.position.x = THREE.MathUtils.clamp(player.position.x, -10, 10);
-
-                if (!isHoldingJump && playerVelocityY > MIN_JUMP_FORCE) playerVelocityY *= 0.82;
-                playerVelocityY -= GRAVITY * delta;
-                player.position.y += playerVelocityY * delta;
-
-                if (isJumping) player.rotation.x -= 8 * delta;
-                else player.rotation.x = THREE.MathUtils.lerp(player.rotation.x, 0, 0.15);
-                player.rotation.z = THREE.MathUtils.lerp(player.rotation.z, 0, 0.1);
-
-                let currentSpeed = gameSpeed + (moveInput.z * 7); 
+            if(gameActive) {
+                const dt = 0.016;
                 
-                platforms.forEach(p => {
-                    p.position.z += currentSpeed * delta;
-                    if(p.userData.isMoving) p.position.x += p.userData.speed * delta * 2.5;
-                });
-                
+                // Lateral move
+                player.position.x += moveX * 0.15;
+                player.position.x = THREE.MathUtils.clamp(player.position.x, -12, 12);
+
+                // Gravity
+                playerVelY -= 40 * dt;
+                player.position.y += playerVelY * dt;
+
+                // Move world
+                const curSpeed = speed + (moveZ * 6);
+                platforms.forEach(p => p.position.z += curSpeed * dt);
                 items.forEach(i => {
-                    i.position.z += currentSpeed * delta;
-                    i.rotation.y += 3 * delta;
-                    if (player.position.distanceTo(i.position) < 1.2) {
-                        totalCoins++;
-                        updateUI();
+                    i.position.z += curSpeed * dt;
+                    i.rotation.y += 2 * dt;
+                    if(player.position.distanceTo(i.position) < 1.2) {
+                        totalCoins += 10;
+                        updateHUD();
                         scene.remove(i);
-                        items = items.filter(coin => coin !== i);
+                        items = items.filter(x => x !== i);
+                        if(document.getElementById('sfxToggle').checked) playNote(880, audioCtx.currentTime, 0.05, 0.03);
                     }
                 });
-
                 obstacles.forEach(o => {
-                    if (o.userData.parent) {
-                        o.position.z = o.userData.parent.position.z;
-                        o.position.x = o.userData.parent.position.x;
-                    } else { o.position.z += currentSpeed * delta; }
-                    if (player.position.distanceTo(o.position) < 1.0) gameOver();
+                    o.position.z += curSpeed * dt;
+                    if(player.position.distanceTo(o.position) < 1.1) gameOver();
                 });
 
-                if (platforms.length > 0 && platforms[0].position.z > 20) {
-                    const oldP = platforms.shift();
-                    scene.remove(oldP);
-                    sessionScore++;
-                    document.getElementById('score').innerText = formatNumber(sessionScore);
-                    gameSpeed += 0.07;
-                    createPlatform(platforms[platforms.length - 1].position.z - PLATFORM_GAP_BASE);
-                    items = items.filter(i => { if(i.position.z > 20) { scene.remove(i); return false; } return true; });
-                    obstacles = obstacles.filter(o => { if(o.position.z > 20) { scene.remove(o); return false; } return true; });
+                // Infinite loop
+                if(platforms[0].position.z > 20) {
+                    const old = platforms.shift();
+                    scene.remove(old);
+                    score++;
+                    speed += 0.05;
+                    document.getElementById('score').innerText = formatNumber(score);
+                    createPlatform(platforms[platforms.length-1].position.z - 8);
                 }
 
+                // Collisions
                 platforms.forEach(p => {
-                    const distZ = Math.abs(player.position.z - p.position.z);
-                    const distX = Math.abs(player.position.x - p.position.x);
-                    const halfW = p.geometry.parameters.width / 2 + 0.4;
-                    if (distZ < 2.0 && distX < halfW && playerVelocityY < 0 && player.position.y <= 1.2 && player.position.y > 0.3) {
-                        player.position.y = 1.2; playerVelocityY = 0;
-                        isJumping = false; jumpsAvailable = 2;
+                    if(playerVelY < 0 && 
+                       Math.abs(player.position.z - p.position.z) < 2.2 &&
+                       Math.abs(player.position.x - p.position.x) < p.geometry.parameters.width/2 + 0.5 &&
+                       player.position.y < 1.2 && player.position.y > 0) {
+                        player.position.y = 1.2;
+                        playerVelY = 0;
+                        jumps = 2;
                     }
                 });
 
-                if (player.position.y < -8) gameOver();
+                if(player.position.y < -10) gameOver();
             }
             renderer.render(scene, camera);
         }
+
         window.onload = init;
+        window.onresize = () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        };
     </script>
 </body>
 </html>
