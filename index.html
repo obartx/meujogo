@@ -1,222 +1,546 @@
-﻿<!doctype html>
-<html lang="pt-BR">
+<!DOCTYPE html>
+<html lang="pt-br">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Calculadora de Investimento FII</title>
-  <style>
-    :root {
-      --bg-1: #f6f8f2;
-      --bg-2: #e9efe3;
-      --card: #ffffff;
-      --head: #d9e7cf;
-      --line: #c9d5bf;
-      --text: #1f2a1f;
-      --accent: #3c6e47;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Panda Jump 3D - Duplo Jump</title>
+    <style>
+        :root {
+            --primary: #ff4757;
+            --secondary: #2f3542;
+            --accent: #ffa502;
+            --bg-ui: rgba(255, 255, 255, 0.95);
+        }
+        body { margin: 0; overflow: hidden; font-family: 'Segoe UI', sans-serif; background: #a5f3fc; touch-action: none; }
+        
+        #ui-hud {
+            position: absolute;
+            top: 20px;
+            left: 0;
+            width: 100%;
+            display: flex;
+            justify-content: space-around;
+            pointer-events: none;
+            z-index: 10;
+        }
+        .stat-box {
+            background: rgba(15, 23, 42, 0.25);
+            padding: 10px 25px;
+            border-radius: 40px;
+            color: white;
+            font-weight: bold;
+            backdrop-filter: blur(10px);
+            font-size: 24px;
+            border: 1.5px solid rgba(255,255,255,0.2);
+        }
 
-    * { box-sizing: border-box; }
+        #joystick-container {
+            position: absolute;
+            bottom: 40px;
+            left: 30px;
+            width: 180px; 
+            height: 180px;
+            background: rgba(25, 25, 35, 0.4);
+            border-radius: 50%;
+            touch-action: none;
+            z-index: 100;
+            display: none;
+            border: 3px solid rgba(0, 150, 255, 0.4);
+            box-shadow: 0 0 30px rgba(0, 150, 255, 0.15);
+        }
+        #joystick-knob {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 80px;
+            height: 80px;
+            background: radial-gradient(circle, #0096ff, #0055ff);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            box-shadow: 0 0 20px rgba(0, 150, 255, 0.8), inset 0 0 15px rgba(255,255,255,0.4);
+            pointer-events: none;
+        }
 
-    body {
-      margin: 0;
-      font-family: "Segoe UI", "Trebuchet MS", sans-serif;
-      color: var(--text);
-      background:
-        radial-gradient(circle at 10% 15%, #ffffff 0%, transparent 35%),
-        radial-gradient(circle at 85% 80%, #dbe8d4 0%, transparent 30%),
-        linear-gradient(135deg, var(--bg-1), var(--bg-2));
-      min-height: 100vh;
-      padding: 24px;
-      display: grid;
-      place-items: start center;
-    }
+        #jump-btn {
+            position: absolute;
+            bottom: 40px;
+            right: 30px;
+            width: 120px;
+            height: 120px;
+            background: rgba(255, 71, 87, 0.8);
+            border-radius: 50%;
+            display: none;
+            z-index: 100;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-weight: bold;
+            font-size: 18px;
+            text-align: center;
+            border: 4px solid white;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+            user-select: none;
+            touch-action: none;
+            line-height: 1.1;
+        }
 
-    .wrap {
-      width: min(980px, 100%);
-      background: var(--card);
-      border: 1px solid var(--line);
-      border-radius: 14px;
-      box-shadow: 0 14px 30px rgba(31, 42, 31, 0.08);
-      overflow: hidden;
-      animation: rise 420ms ease-out;
-    }
+        #overlay {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(15, 23, 42, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 200;
+            backdrop-filter: blur(6px);
+        }
 
-    @keyframes rise {
-      from { opacity: 0; transform: translateY(12px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
+        #countdown-timer {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            font-size: 120px;
+            font-weight: 900;
+            z-index: 150;
+            text-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            display: none;
+            pointer-events: none;
+        }
+        
+        .countdown-anim {
+            animation: pop 1s ease-out forwards;
+        }
 
-    h1 {
-      margin: 0;
-      padding: 18px 20px;
-      background: #f1f6ec;
-      border-bottom: 1px solid var(--line);
-      font-size: 1.2rem;
-      letter-spacing: 0.2px;
-    }
+        @keyframes pop {
+            0% { transform: translate(-50%, -50%) scale(0.5); opacity: 0; }
+            50% { transform: translate(-50%, -50%) scale(1.2); opacity: 1; }
+            100% { transform: translate(-50%, -50%) scale(1); opacity: 0; }
+        }
+        
+        .card {
+            background: var(--bg-ui);
+            width: 85%;
+            max-width: 400px;
+            border-radius: 35px;
+            padding: 30px;
+            text-align: center;
+        }
 
-    table {
-      width: 100%;
-      border-collapse: collapse;
-    }
+        .tabs { display: flex; margin-bottom: 25px; background: #f1f5f9; border-radius: 20px; padding: 5px; }
+        .tab-btn { flex: 1; padding: 12px; border: none; cursor: pointer; font-weight: 800; background: transparent; border-radius: 15px; color: #64748b; }
+        .tab-btn.active { background: white; color: var(--primary); box-shadow: 0 5px 15px rgba(0,0,0,0.08); }
 
-    th, td {
-      border: 1px solid var(--line);
-      padding: 10px;
-      text-align: center;
-      font-size: 1.02rem;
-    }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
 
-    th {
-      background: var(--head);
-      font-weight: 700;
-    }
+        .skin-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin-bottom: 25px; max-height: 280px; overflow-y: auto; }
+        .skin-item { background: white; padding: 15px; border-radius: 25px; border: 3px solid #f1f5f9; cursor: pointer; }
+        .skin-item.selected { border-color: var(--primary); background: #fff1f2; }
+        .skin-icon { font-size: 42px; }
 
-    input {
-      width: 100%;
-      border: 1px solid #b7c6ad;
-      border-radius: 8px;
-      padding: 8px 10px;
-      font-size: 1rem;
-      text-align: center;
-      background: #fcfefb;
-    }
+        button.main-btn {
+            background: linear-gradient(135deg, #ff4757, #ff6b81);
+            color: white; border: none; padding: 20px; font-size: 24px; border-radius: 25px; cursor: pointer; font-weight: 900; width: 100%;
+        }
 
-    input:focus {
-      outline: 2px solid #9ac29f;
-      border-color: #9ac29f;
-    }
-
-    .out {
-      font-weight: 700;
-      color: #193f2a;
-      background: #f9fcf7;
-      border-radius: 8px;
-      padding: 8px;
-      min-height: 40px;
-      display: grid;
-      place-items: center;
-    }
-
-    .hint {
-      margin: 0;
-      padding: 14px 20px 18px;
-      font-size: 0.92rem;
-      color: #3a4c3a;
-      border-top: 1px solid var(--line);
-      background: #fcfefb;
-    }
-
-    @media (max-width: 900px) {
-      body { padding: 10px; }
-      .wrap { border-radius: 10px; }
-      table, thead, tbody, tr, th, td { display: block; }
-      thead { display: none; }
-      tr { border-bottom: 1px solid var(--line); padding: 8px 0; }
-      td {
-        display: grid;
-        grid-template-columns: 1fr;
-        gap: 6px;
-      }
-      td::before {
-        content: attr(data-label);
-        font-weight: 700;
-        background: var(--head);
-        padding: 6px;
-        border-radius: 6px;
-      }
-    }
-  </style>
+        canvas { display: block; }
+    </style>
 </head>
 <body>
-  <main class="wrap">
-    <h1>Calculadora de Investimento em FII (com reinvestimento mensal)</h1>
-    <table>
-      <thead>
-        <tr>
-          <th>FII</th>
-          <th>Valor da Cota (R$)</th>
-          <th>Valor do Dividendo (R$)</th>
-          <th>Aporte Mensal (R$)</th>
-          <th>Período (meses)</th>
-          <th>Qtd de Cotas</th>
-          <th>Dividendos Mensais (R$)</th>
-          <th>Valor Total em Cotas (R$)</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td data-label="FII"><input id="fii" value="MXRF11" /></td>
-          <td data-label="Valor da Cota (R$)"><input id="valorCota" type="number" step="0.01" value="9.51" /></td>
-          <td data-label="Valor do Dividendo (R$)"><input id="valorDividendo" type="number" step="0.01" value="0.10" /></td>
-          <td data-label="Aporte Mensal (R$)"><input id="aporteMensal" type="number" step="0.01" value="100" /></td>
-          <td data-label="Período (meses)"><input id="periodo" type="number" step="1" value="68" /></td>
-          <td data-label="Qtd de Cotas"><div class="out" id="qtdCotas">-</div></td>
-          <td data-label="Dividendos Mensais (R$)"><div class="out" id="dividendosMensais">-</div></td>
-          <td data-label="Valor Total em Cotas (R$)"><div class="out" id="valorTotal">-</div></td>
-        </tr>
-      </tbody>
-    </table>
-    <p class="hint">
-      Regra usada: a cada mês compra novas cotas com <strong>aporte + dividendos recebidos</strong>, mantendo preço da cota e dividendo fixos.
-    </p>
-  </main>
 
-  <script>
-    const brl = new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' });
-    const dec = new Intl.NumberFormat('pt-BR', { minimumFractionDigits: 3, maximumFractionDigits: 3 });
+    <div id="ui-hud">
+        <div class="stat-box">⭐ <span id="score">0</span></div>
+        <div class="stat-box">💰 <span id="coins">0</span></div>
+    </div>
 
-    const els = {
-      valorCota: document.getElementById('valorCota'),
-      valorDividendo: document.getElementById('valorDividendo'),
-      aporteMensal: document.getElementById('aporteMensal'),
-      periodo: document.getElementById('periodo'),
-      qtdCotas: document.getElementById('qtdCotas'),
-      dividendosMensais: document.getElementById('dividendosMensais'),
-      valorTotal: document.getElementById('valorTotal')
-    };
+    <div id="countdown-timer"></div>
 
-    function num(v) {
-      const n = Number(v);
-      return Number.isFinite(n) ? n : 0;
-    }
+    <div id="joystick-container">
+        <div id="joystick-knob"></div>
+    </div>
 
-    function calcular() {
-      const valorCota = num(els.valorCota.value);
-      const valorDividendo = num(els.valorDividendo.value);
-      const aporteMensal = num(els.aporteMensal.value);
-      const periodo = Math.max(0, Math.floor(num(els.periodo.value)));
+    <div id="jump-btn">PULAR<br><small style="font-size: 10px;">DUPLO JUMP</small></div>
 
-      if (valorCota <= 0) {
-        els.qtdCotas.textContent = '0,000';
-        els.dividendosMensais.textContent = brl.format(0);
-        els.valorTotal.textContent = brl.format(0);
-        return;
-      }
+    <div id="overlay">
+        <div class="card">
+            <div class="tabs">
+                <button class="tab-btn active" id="btn-home" onclick="showTab('home')">INÍCIO</button>
+                <button class="tab-btn" id="btn-shop" onclick="showTab('shop')">LOJA</button>
+            </div>
 
-      let cotas = 0;
-      for (let i = 0; i < periodo; i++) {
-        const dividendosDoMes = cotas * valorDividendo;
-        const capitalDoMes = aporteMensal + dividendosDoMes;
-        cotas += capitalDoMes / valorCota;
-      }
+            <div id="home" class="tab-content active">
+                <h1 id="menu-title" style="color: var(--secondary); margin: 0 0 10px 0; font-size: 32px;">Panda Jump</h1>
+                <p id="menu-desc" style="color: #64748b; margin-bottom: 30px; font-weight: 500;">Agora com DUPLO JUMP!<br>Plataformas maiores e mais espaço.</p>
+                <button class="main-btn" onclick="startPreGame()">JOGAR!</button>
+            </div>
 
-      const dividendosMensais = cotas * valorDividendo;
-      const valorTotal = cotas * valorCota;
+            <div id="shop" class="tab-content">
+                <h2 style="color: var(--secondary); margin: 0 0 20px 0; font-size: 22px;">Skins Exclusivas</h2>
+                <div class="skin-grid" id="skinGrid"></div>
+            </div>
+        </div>
+    </div>
 
-      els.qtdCotas.textContent = dec.format(cotas);
-      els.dividendosMensais.textContent = brl.format(dividendosMensais);
-      els.valorTotal.textContent = brl.format(valorTotal);
-    }
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script>
+        const SKINS = [
+            { id: 'panda', name: 'Panda', icon: '🐼', colors: { body: 0xffffff, accent: 0x222222 } },
+            { id: 'cat', name: 'Gatinho', icon: '🐱', colors: { body: 0xffa502, accent: 0xffffff } },
+            { id: 'robot', name: 'Robô', icon: '🤖', colors: { body: 0x94a3b8, accent: 0x38bdf8 } },
+            { id: 'gold', name: 'Ouro', icon: '🏆', colors: { body: 0xfacc15, accent: 0xd97706 } }
+        ];
 
-    [
-      els.valorCota,
-      els.valorDividendo,
-      els.aporteMensal,
-      els.periodo
-    ].forEach((el) => el.addEventListener('input', calcular));
+        let currentSkinId = 'panda';
+        let totalCoins = 0;
+        let sessionScore = 0;
 
-    calcular();
-  </script>
+        let scene, camera, renderer, player, platforms = [], clouds = [], particles = [];
+        let gameActive = false;
+        let clock = new THREE.Clock();
+        
+        // Física e Controle Ajustados
+        const GRAVITY = 40; // Levemente reduzida para compensar o duplo salto
+        const JUMP_FORCE = 15.5; 
+        const MIN_JUMP_FORCE = 7.5;
+        const PLATFORM_GAP_BASE = 7.0; // Espaçamento maior solicitado
+        const LATERAL_SENSITIVITY = 0.12;
+        
+        let playerVelocityY = 0;
+        let isJumping = false;
+        let jumpsAvailable = 2; // Mecânica de Duplo Jump
+        let isHoldingJump = false;
+        let gameSpeed = 9.0; // Velocidade base levemente ajustada
+        let moveInput = { x: 0, z: 0 };
+
+        // Variáveis do Joystick (Multi-touch)
+        const joystickContainer = document.getElementById('joystick-container');
+        const joystickKnob = document.getElementById('joystick-knob');
+        let joystickActive = false;
+        let joystickCenter = { x: 0, y: 0 };
+        let joystickTouchId = null;
+
+        function init() {
+            scene = new THREE.Scene();
+            scene.fog = new THREE.Fog(0xa5f3fc, 25, 70); // Neblina mais distante para ver o espaço
+
+            camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
+            camera.position.set(0, 10, 18);
+            camera.lookAt(0, 2, -4);
+
+            renderer = new THREE.WebGLRenderer({ antialias: true });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+            renderer.shadowMap.enabled = true;
+            document.body.appendChild(renderer.domElement);
+
+            const ambientLight = new THREE.AmbientLight(0xffffff, 0.8);
+            scene.add(ambientLight);
+
+            const sunLight = new THREE.DirectionalLight(0xffffff, 1.2);
+            sunLight.position.set(10, 30, 10);
+            sunLight.castShadow = true;
+            scene.add(sunLight);
+
+            createEnvironment();
+            renderShop();
+            updatePlayerModel();
+            setupControls();
+            resetLevel();
+
+            window.addEventListener('resize', onWindowResize);
+            animate();
+        }
+
+        function setupControls() {
+            // JOYSTICK MULTI-TOUCH
+            const handleJoystickStart = (e) => {
+                if(!gameActive || joystickActive) return;
+                const touch = e.changedTouches ? e.changedTouches[0] : e;
+                const rect = joystickContainer.getBoundingClientRect();
+                joystickActive = true;
+                joystickTouchId = touch.identifier !== undefined ? touch.identifier : "mouse";
+                joystickCenter = { x: rect.left + rect.width / 2, y: rect.top + rect.height / 2 };
+                updateJoystickPos(touch);
+            };
+
+            const handleJoystickMove = (e) => {
+                if (!joystickActive) return;
+                let targetTouch = null;
+                if (e.changedTouches) {
+                    for (let i = 0; i < e.changedTouches.length; i++) {
+                        if (e.changedTouches[i].identifier === joystickTouchId) {
+                            targetTouch = e.changedTouches[i];
+                            break;
+                        }
+                    }
+                } else { targetTouch = e; }
+                if (targetTouch) {
+                    e.preventDefault();
+                    updateJoystickPos(targetTouch);
+                }
+            };
+
+            const updateJoystickPos = (input) => {
+                let dx = input.clientX - joystickCenter.x;
+                let dy = input.clientY - joystickCenter.y;
+                const dist = Math.sqrt(dx*dx + dy*dy);
+                const maxDist = 80;
+                if (dist > maxDist) {
+                    dx *= maxDist / dist;
+                    dy *= maxDist / dist;
+                }
+                joystickKnob.style.transform = `translate(calc(-50% + ${dx}px), calc(-50% + ${dy}px))`;
+                moveInput.x = dx / maxDist;
+                moveInput.z = dy < 0 ? Math.abs(dy / maxDist) : 0;
+            };
+
+            const handleJoystickEnd = (e) => {
+                if (!joystickActive) return;
+                let shouldEnd = false;
+                if (e.changedTouches) {
+                    for (let i = 0; i < e.changedTouches.length; i++) {
+                        if (e.changedTouches[i].identifier === joystickTouchId) {
+                            shouldEnd = true;
+                            break;
+                        }
+                    }
+                } else { shouldEnd = true; }
+                if (shouldEnd) {
+                    joystickActive = false;
+                    joystickTouchId = null;
+                    joystickKnob.style.transform = `translate(-50%, -50%)`;
+                    moveInput = { x: 0, z: 0 };
+                }
+            };
+
+            joystickContainer.addEventListener('touchstart', handleJoystickStart);
+            window.addEventListener('touchmove', handleJoystickMove, { passive: false });
+            window.addEventListener('touchend', handleJoystickEnd);
+            window.addEventListener('touchcancel', handleJoystickEnd);
+            joystickContainer.addEventListener('mousedown', handleJoystickStart);
+            window.addEventListener('mousemove', handleJoystickMove);
+            window.addEventListener('mouseup', handleJoystickEnd);
+
+            // BOTAO DE PULO MULTI-TOUCH
+            const jumpBtn = document.getElementById('jump-btn');
+            const startJump = (e) => {
+                if(!gameActive) return;
+                e.preventDefault();
+                isHoldingJump = true;
+                handleJump();
+            };
+            const endJump = (e) => { isHoldingJump = false; };
+
+            jumpBtn.addEventListener('touchstart', startJump);
+            jumpBtn.addEventListener('touchend', endJump);
+            jumpBtn.addEventListener('mousedown', startJump);
+            window.addEventListener('mouseup', endJump);
+        }
+
+        function createEnvironment() {
+            const groundGeo = new THREE.PlaneGeometry(200, 200);
+            const groundMat = new THREE.MeshPhongMaterial({ color: 0x7dd3fc });
+            const ground = new THREE.Mesh(groundGeo, groundMat);
+            ground.rotation.x = -Math.PI / 2;
+            ground.position.y = -15;
+            scene.add(ground);
+
+            for(let i = 0; i < 8; i++) {
+                const mtGeo = new THREE.ConeGeometry(20, 25, 4);
+                const mtMat = new THREE.MeshPhongMaterial({ color: 0x60a5fa });
+                const mt = new THREE.Mesh(mtGeo, mtMat);
+                mt.position.set(Math.random()*100-50, -10, -Math.random()*100-20);
+                scene.add(mt);
+            }
+
+            for(let i = 0; i < 20; i++) {
+                const cloud = new THREE.Group();
+                const mat = new THREE.MeshLambertMaterial({ color: 0xffffff, transparent: true, opacity: 0.8 });
+                const size = 1 + Math.random();
+                const part = new THREE.Mesh(new THREE.BoxGeometry(size*4, size, size*2.5), mat);
+                cloud.add(part);
+                cloud.position.set(Math.random() * 120 - 60, Math.random() * 15 + 10, -Math.random() * 100);
+                scene.add(cloud);
+                clouds.push(cloud);
+            }
+        }
+
+        function updatePlayerModel() {
+            if (player) scene.remove(player);
+            const skinData = SKINS.find(s => s.id === currentSkinId);
+            const group = new THREE.Group();
+            const body = new THREE.Mesh(new THREE.BoxGeometry(1.2, 1.2, 1.2), new THREE.MeshPhongMaterial({ color: skinData.colors.body }));
+            body.castShadow = true; group.add(body);
+            const detailMat = new THREE.MeshPhongMaterial({ color: skinData.colors.accent });
+            const earGeo = new THREE.BoxGeometry(0.4, 0.4, 0.3);
+            const dL = new THREE.Mesh(earGeo, detailMat); dL.position.set(-0.5, 0.6, 0); group.add(dL);
+            const dR = new THREE.Mesh(earGeo, detailMat); dR.position.set(0.5, 0.6, 0); group.add(dR);
+            player = group;
+            player.position.set(0, 1.2, 0);
+            scene.add(player);
+        }
+
+        function createPlatform(z, forceStatic = false) {
+            const colors = [0xff4757, 0x2ed573, 0xffa502, 0x1e90ff, 0x3742fa, 0x70a1ff];
+            // Plataformas maiores solicitadas (largura base aumentada de 3.5 para 4.5)
+            const width = forceStatic ? 6 : 4.5 + (Math.random() * 2.0);
+            const mesh = new THREE.Mesh(new THREE.BoxGeometry(width, 1.2, 4.0), new THREE.MeshPhongMaterial({ color: colors[Math.floor(Math.random() * colors.length)] }));
+            mesh.position.set(forceStatic ? 0 : (Math.random() - 0.5) * 8, 0, z);
+            mesh.receiveShadow = true;
+            if(!forceStatic && Math.random() > 0.65) {
+                mesh.userData.isMoving = true;
+                mesh.userData.speed = (1.2 + Math.random()) * (Math.random() > 0.5 ? 1 : -1);
+            }
+            scene.add(mesh);
+            platforms.push(mesh);
+        }
+
+        function handleJump() {
+            if (jumpsAvailable > 0) {
+                playerVelocityY = JUMP_FORCE;
+                isJumping = true;
+                jumpsAvailable--;
+                
+                // Feedback visual do duplo salto (giro extra)
+                if (jumpsAvailable === 0) {
+                    player.rotation.z += Math.PI; 
+                }
+            }
+        }
+
+        function gameOver() {
+            gameActive = false;
+            document.getElementById('overlay').style.display = 'flex';
+            document.getElementById('joystick-container').style.display = 'none';
+            document.getElementById('jump-btn').style.display = 'none';
+            totalCoins += Math.floor(sessionScore / 2);
+            document.getElementById('coins').innerText = totalCoins;
+            showTab('home');
+        }
+
+        function resetLevel() {
+            platforms.forEach(p => scene.remove(p)); platforms = [];
+            player.position.set(0, 1.2, 0); playerVelocityY = 0; 
+            isJumping = false;
+            jumpsAvailable = 2;
+            sessionScore = 0; gameSpeed = 9.0;
+            document.getElementById('score').innerText = "0";
+            createPlatform(0, true);
+            for(let i = 1; i < 8; i++) createPlatform(-i * PLATFORM_GAP_BASE);
+        }
+
+        function startPreGame() {
+            resetLevel();
+            document.getElementById('overlay').style.display = 'none';
+            document.getElementById('joystick-container').style.display = 'block';
+            document.getElementById('jump-btn').style.display = 'flex';
+            
+            const timerEl = document.getElementById('countdown-timer');
+            timerEl.style.display = 'block';
+            
+            let count = 3;
+            const runCountdown = () => {
+                timerEl.innerText = count > 0 ? count : "VAI!";
+                timerEl.classList.remove('countdown-anim');
+                void timerEl.offsetWidth;
+                timerEl.classList.add('countdown-anim');
+                if (count >= 0) {
+                    count--;
+                    setTimeout(runCountdown, 1000);
+                } else {
+                    timerEl.style.display = 'none';
+                    gameActive = true;
+                }
+            };
+            runCountdown();
+        }
+
+        function renderShop() {
+            const grid = document.getElementById('skinGrid');
+            grid.innerHTML = '';
+            SKINS.forEach(skin => {
+                const item = document.createElement('div');
+                item.className = `skin-item ${skin.id === currentSkinId ? 'selected' : ''}`;
+                item.onclick = () => { currentSkinId = skin.id; renderShop(); updatePlayerModel(); };
+                item.innerHTML = `<div class="skin-icon">${skin.icon}</div><div class="skin-name">${skin.name}</div>`;
+                grid.appendChild(item);
+            });
+        }
+
+        function showTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById(tabId).classList.add('active');
+            document.getElementById('btn-' + tabId).classList.add('active');
+        }
+
+        function onWindowResize() {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        }
+
+        function animate() {
+            requestAnimationFrame(animate);
+            let delta = clock.getDelta();
+            if(delta > 0.1) delta = 0.016;
+
+            clouds.forEach(c => { c.position.x += 0.8 * delta; if(c.position.x > 60) c.position.x = -60; });
+
+            if (gameActive) {
+                // Movimento lateral contínuo
+                if (Math.abs(moveInput.x) > 0.01) {
+                    player.position.x += moveInput.x * LATERAL_SENSITIVITY * 90 * delta;
+                }
+                player.position.x = THREE.MathUtils.clamp(player.position.x, -10, 10);
+
+                // Física de Salto
+                if (!isHoldingJump && playerVelocityY > MIN_JUMP_FORCE) playerVelocityY *= 0.82;
+                playerVelocityY -= GRAVITY * delta;
+                player.position.y += playerVelocityY * delta;
+
+                // Animação de rotação no pulo
+                if (isJumping) player.rotation.x -= 8 * delta;
+                else player.rotation.x = THREE.MathUtils.lerp(player.rotation.x, 0, 0.15);
+                player.rotation.z = THREE.MathUtils.lerp(player.rotation.z, 0, 0.1);
+
+                // Movimento do mundo
+                let currentSpeed = gameSpeed + (moveInput.z * 7); 
+                platforms.forEach(p => {
+                    p.position.z += currentSpeed * delta;
+                    if(p.userData.isMoving) p.position.x += p.userData.speed * delta * 2.5;
+                });
+
+                // Gerar novas plataformas
+                if (platforms.length > 0 && platforms[0].position.z > 20) {
+                    scene.remove(platforms.shift());
+                    sessionScore++;
+                    document.getElementById('score').innerText = sessionScore;
+                    gameSpeed += 0.06;
+                    createPlatform(platforms[platforms.length - 1].position.z - PLATFORM_GAP_BASE);
+                }
+
+                // Colisão
+                platforms.forEach(p => {
+                    const distZ = Math.abs(player.position.z - p.position.z);
+                    const distX = Math.abs(player.position.x - p.position.x);
+                    const halfW = p.geometry.parameters.width / 2 + 0.5;
+                    // Se estiver caindo e dentro dos limites da plataforma
+                    if (distZ < 2.0 && distX < halfW && playerVelocityY < 0 && player.position.y <= 1.2 && player.position.y > 0) {
+                        player.position.y = 1.2;
+                        playerVelocityY = 0;
+                        isJumping = false;
+                        jumpsAvailable = 2; // Resetar Duplo Jump ao tocar o chão
+                    }
+                });
+
+                if (player.position.y < -8) gameOver();
+            }
+            renderer.render(scene, camera);
+        }
+        window.onload = init;
+    </script>
 </body>
 </html>
